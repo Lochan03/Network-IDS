@@ -1,6 +1,8 @@
 import joblib
 import numpy as np
-from scapy.all import sniff, IP, TCP, UDP
+import argparse
+import time
+from scapy.all import sniff, IP, TCP, UDP, rdpcap
 from sklearn.preprocessing import StandardScaler
 import logging
 import json
@@ -116,10 +118,58 @@ def start_websocket():
 def start_sniffing():
     sniff(filter="ip", prn=predict_intrusion, store=0)
 
+
+def process_pcap(file_path, delay=0.0):
+    """Read packets from a pcap file and feed them to the prediction pipeline.
+
+    delay: seconds to wait between packets (0 = no wait). Useful for replaying
+    traffic at a slower rate during development without requiring root.
+    """
+    try:
+        packets = rdpcap(file_path)
+    except FileNotFoundError:
+        logging.error(f"PCAP file not found: {file_path}")
+        return
+
+    logging.info(f"Replaying {len(packets)} packets from {file_path}")
+    for pkt in packets:
+        try:
+            predict_intrusion(pkt)
+        except Exception as e:
+            logging.exception("Error processing packet from pcap: %s", e)
+        if delay > 0:
+            time.sleep(delay)
+
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Run NIDS packet detector")
+    parser.add_argument("--pcap", help="Path to pcap file to replay instead of live sniffing")
+    parser.add_argument("--delay", type=float, default=0.0, help="Delay between replayed packets (seconds)")
+    parser.add_argument("--hold", type=float, default=5.0, help="Seconds to keep server alive after replay (useful for testing)")
+    parser.add_argument("--loop", type=float, default=0.0, help="If >0, continuously replay the pcap every N seconds")
+    args = parser.parse_args()
+
     # Start WebSocket server in a separate thread
-    ws_thread = threading.Thread(target=start_websocket)
+    ws_thread = threading.Thread(target=start_websocket, daemon=True)
     ws_thread.start()
-    
-    # Start packet sniffing in the main thread
-    start_sniffing()
+
+    if args.pcap:
+        # Replay from a pcap file (no sudo required)
+        # Give a short window for clients to connect
+        time.sleep(1.0)
+        if args.loop > 0:
+            while True:
+                process_pcap(args.pcap, delay=args.delay)
+                time.sleep(args.loop)
+        else:
+            process_pcap(args.pcap, delay=args.delay)
+            # keep server alive for a short while so clients can receive messages
+            time.sleep(args.hold)
+    else:
+        # Live sniffing (requires root on macOS to access /dev/bpf*)
+        try:
+            start_sniffing()
+        except PermissionError as e:
+            logging.error("Permission error while opening BPF device: %s", e)
+            logging.error("Live sniffing requires root privileges on macOS. Try running with sudo or use --pcap <file> to replay a pcap.")
+        except Exception as e:
+            logging.exception("Unexpected error in sniffing: %s", e)

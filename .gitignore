@@ -1,0 +1,12 @@
+# Backend venv and artifacts
+backend/.venv/
+backend/*.log
+backend/*.pid
+backend/*.pcap
+backend_run_pcap.log
+
+# MacOS
+.DS_Store
+
+# Node modules at root (if any)
+node_modules/
