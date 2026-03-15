@@ -46,16 +46,230 @@
     @apply bg-cyberpulse-dark text-foreground antialiased;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
   }
-  
+
   .glass-card {
     @apply bg-black/30 backdrop-blur-md border border-white/10 rounded-xl;
   }
-  
+
   .cyber-heading {
     @apply font-bold bg-clip-text text-transparent bg-cyber-gradient;
   }
-  
+
   .cyber-card {
     @apply bg-cyberpulse-darker border border-cyberpulse-purple/20 rounded-xl shadow-lg shadow-cyberpulse-purple/10;
   }
 }
+
+/* ============================================================
+   CYBER-PULSE ADVANCED ANIMATIONS & EFFECTS
+   ============================================================ */
+
+/* ── Scan-line overlay ── */
+@keyframes scanline {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+.scanline-overlay::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(155, 135, 245, 0.03) 50%
+  );
+  background-size: 100% 4px;
+  z-index: 9999;
+}
+
+/* ── Grid background ── */
+.cyber-grid-bg {
+  background-image:
+    linear-gradient(rgba(155, 135, 245, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(155, 135, 245, 0.07) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ── Glow pulse ── */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px 2px rgba(155,135,245,0.35); }
+  50%       { box-shadow: 0 0 24px 6px rgba(155,135,245,0.65); }
+}
+.glow-pulse { animation: glow-pulse 2s ease-in-out infinite; }
+
+@keyframes glow-pulse-red {
+  0%, 100% { box-shadow: 0 0 8px 2px rgba(234,56,76,0.4); }
+  50%       { box-shadow: 0 0 28px 8px rgba(234,56,76,0.75); }
+}
+.glow-pulse-red { animation: glow-pulse-red 1.5s ease-in-out infinite; }
+
+@keyframes glow-pulse-green {
+  0%, 100% { box-shadow: 0 0 6px 2px rgba(16,185,129,0.35); }
+  50%       { box-shadow: 0 0 20px 6px rgba(16,185,129,0.65); }
+}
+.glow-pulse-green { animation: glow-pulse-green 2s ease-in-out infinite; }
+
+/* ── Typewriter cursor blink ── */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+.cursor-blink::after {
+  content: '|';
+  animation: blink 1s step-end infinite;
+  color: #9b87f5;
+  margin-left: 2px;
+}
+
+/* ── Number counter float-up ── */
+@keyframes float-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-float-up { animation: float-up 0.6s ease-out forwards; }
+
+/* ── Slide-in-right ── */
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.animate-slide-in-right { animation: slide-in-right 0.5s ease-out forwards; }
+
+/* ── Fade-in ── */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.animate-fade-in { animation: fade-in 0.8s ease-out forwards; }
+
+/* ── Alert shake ── */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-6px); }
+  40%       { transform: translateX(6px); }
+  60%       { transform: translateX(-4px); }
+  80%       { transform: translateX(4px); }
+}
+.animate-shake { animation: shake 0.4s ease-in-out; }
+
+/* ── Radar sweep ── */
+@keyframes radar-sweep {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.radar-sweep {
+  animation: radar-sweep 3s linear infinite;
+  transform-origin: center bottom;
+}
+
+/* ── Threat bar fill ── */
+@keyframes threat-fill {
+  from { width: 0%; }
+  to   { width: var(--fill-width, 50%); }
+}
+.animate-threat-fill { animation: threat-fill 1.2s ease-out forwards; }
+
+/* ── Hero floating orb ── */
+@keyframes float-orb {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50%       { transform: translateY(-18px) scale(1.04); }
+}
+.float-orb { animation: float-orb 6s ease-in-out infinite; }
+
+/* ── Data stream ── */
+@keyframes data-stream {
+  0%   { background-position: 0% 0%; }
+  100% { background-position: 0% 100%; }
+}
+.data-stream {
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(155,135,245,0.3) 50%,
+    transparent
+  );
+  background-size: 100% 200%;
+  animation: data-stream 1.5s linear infinite;
+}
+
+/* ── Border glow ── */
+.border-glow {
+  border: 1px solid rgba(155,135,245,0.4);
+  box-shadow: 0 0 0 1px rgba(155,135,245,0.1) inset,
+              0 0 20px rgba(155,135,245,0.1);
+  transition: box-shadow 0.3s ease;
+}
+.border-glow:hover {
+  box-shadow: 0 0 0 1px rgba(155,135,245,0.2) inset,
+              0 0 30px rgba(155,135,245,0.25);
+}
+
+/* ── Cyber button ── */
+.cyber-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.cyber-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(155,135,245,0.15) 50%, transparent 60%);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+.cyber-btn:hover::before { transform: translateX(100%); }
+
+/* ── Attack log row ── */
+.log-row-attack {
+  border-left: 3px solid #ea384c;
+  background: rgba(234,56,76,0.06);
+  animation: fade-in 0.4s ease-out;
+}
+.log-row-normal {
+  border-left: 3px solid transparent;
+  animation: fade-in 0.4s ease-out;
+}
+
+/* ── Progress ring ── */
+.progress-ring-circle {
+  transition: stroke-dashoffset 1s ease-in-out;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+/* ── Stat card hover ── */
+.stat-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(155,135,245,0.2);
+}
+
+/* ── Timeline connector ── */
+.timeline-line {
+  background: linear-gradient(to bottom, #9b87f5, #0EA5E9);
+}
+
+/* ── Neon text ── */
+.neon-text-purple {
+  color: #9b87f5;
+  text-shadow: 0 0 8px rgba(155,135,245,0.8), 0 0 20px rgba(155,135,245,0.4);
+}
+.neon-text-red {
+  color: #ea384c;
+  text-shadow: 0 0 8px rgba(234,56,76,0.8), 0 0 20px rgba(234,56,76,0.4);
+}
+.neon-text-green {
+  color: #10B981;
+  text-shadow: 0 0 8px rgba(16,185,129,0.8), 0 0 20px rgba(16,185,129,0.4);
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #1A1F2C; }
+::-webkit-scrollbar-thumb { background: #9b87f5; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #7c6fd4; }
