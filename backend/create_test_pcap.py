@@ -1,3 +1,5 @@
+import argparse
+
 from scapy.all import IP, TCP, Ether, wrpcap
 
 def create_pcap(path='test_traffic.pcap'):
@@ -11,4 +13,7 @@ def create_pcap(path='test_traffic.pcap'):
     print(f"Wrote {len(packets)} packets to {path}")
 
 if __name__ == '__main__':
-    create_pcap()
+    parser = argparse.ArgumentParser(description="Generate a small test PCAP file")
+    parser.add_argument('--out', default='test_traffic.pcap', help='Output pcap file path')
+    args = parser.parse_args()
+    create_pcap(args.out)
