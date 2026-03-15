@@ -1,3 +1,4 @@
+import os
 import joblib
 import numpy as np
 import argparse
@@ -11,10 +12,14 @@ import websockets
 import threading
 from datetime import datetime
 
+# Resolve paths relative to this script's directory so the backend can be
+# launched from any working directory (e.g. the repo root via run_both.sh).
+_BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
+
 # ----------------- Load Trained Components -----------------
-model = joblib.load("nids_xgboost_model3.pkl")
-scaler = joblib.load("nids_scaler3.pkl")
-selected_features = joblib.load("nids_feature_columns3.pkl")
+model = joblib.load(os.path.join(_BACKEND_DIR, "nids_xgboost_model3.pkl"))
+scaler = joblib.load(os.path.join(_BACKEND_DIR, "nids_scaler3.pkl"))
+selected_features = joblib.load(os.path.join(_BACKEND_DIR, "nids_feature_columns3.pkl"))
 
 # ----------------- Logging -----------------
 logging.basicConfig(
@@ -26,18 +31,21 @@ print("🚨 Real-time Network Intrusion Detection Started...")
 
 # ----------------- WebSocket Connections -----------------
 connected_clients = set()
+# The event loop running the WebSocket server; set when the server thread starts.
+_ws_loop: asyncio.AbstractEventLoop | None = None
 
 async def register(websocket):
     connected_clients.add(websocket)
     try:
         await websocket.wait_closed()
     finally:
-        connected_clients.remove(websocket)
+        connected_clients.discard(websocket)
 
 async def broadcast(message):
     if connected_clients:
         await asyncio.gather(
-            *[client.send(message) for client in connected_clients]
+            *[client.send(message) for client in connected_clients],
+            return_exceptions=True,
         )
 
 async def websocket_server():
@@ -103,17 +111,27 @@ def predict_intrusion(pkt):
         "ttl": str(feat_dict['IP_TTL'])
     }
     
-    # Log to file
-    with open("nids_logs.json", "a") as f:
+    # Log to file (use path relative to this script, not the cwd)
+    log_path = os.path.join(_BACKEND_DIR, "nids_logs.json")
+    with open(log_path, "a") as f:
         f.write(json.dumps(log_entry) + "\n")
-    
-    # Broadcast to WebSocket clients
-    asyncio.run(broadcast(json.dumps(log_entry)))
+
+    # Broadcast to WebSocket clients.
+    # predict_intrusion is called from a plain synchronous context (Scapy
+    # callback or a pcap-replay loop). The WebSocket server runs its own
+    # asyncio event loop in a daemon thread (_ws_loop).  We must schedule
+    # the coroutine on *that* loop; using asyncio.run() here would create a
+    # second loop that cannot drive the existing WebSocket connections.
+    if _ws_loop is not None and _ws_loop.is_running():
+        asyncio.run_coroutine_threadsafe(broadcast(json.dumps(log_entry)), _ws_loop)
     logging.info(f"Prediction: {label}")
 
 # ----------------- Start Services -----------------
 def start_websocket():
-    asyncio.run(websocket_server())
+    global _ws_loop
+    _ws_loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(_ws_loop)
+    _ws_loop.run_until_complete(websocket_server())
 
 def start_sniffing():
     sniff(filter="ip", prn=predict_intrusion, store=0)
