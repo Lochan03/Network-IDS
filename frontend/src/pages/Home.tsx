@@ -189,7 +189,7 @@ const Home = () => {
             {/* Status badge */}
             <div className="flex items-center gap-2 text-xs bg-cyberpulse-green/10 border border-cyberpulse-green/30 text-cyberpulse-green px-3 py-1.5 rounded-full w-fit">
               <CheckCircle className="h-3.5 w-3.5" />
-              <span>System Operational — XGBoost Model Active</span>
+              <span>System Operational — LSTM + CNN Hybrid Model Active</span>
             </div>
 
             <h1 className="text-5xl md:text-6xl font-extrabold leading-tight tracking-tight">
@@ -200,7 +200,7 @@ const Home = () => {
 
             <p className="text-lg text-gray-300 max-w-xl leading-relaxed">
               <strong className="text-white">Cyber-Pulse</strong> is a real-time Network Intrusion Detection
-              System powered by XGBoost ML. Monitor every packet, classify every connection, and stop
+              System powered by LSTM + CNN Hybrid ML. Monitor every packet, classify every connection, and stop
               attacks the moment they appear.
             </p>
 
@@ -224,7 +224,7 @@ const Home = () => {
 
             {/* Mini trust badges */}
             <div className="flex flex-wrap gap-4 pt-2 text-xs text-gray-500">
-              {['XGBoost Powered', 'Real-time WebSocket', 'CIC-IDS 2017 Dataset', 'Open Source'].map(b => (
+              {['LSTM + CNN Hybrid Powered', 'Real-time WebSocket', 'CIC-IDS 2017 Dataset', 'Open Source'].map(b => (
                 <span key={b} className="flex items-center gap-1">
                   <CheckCircle className="h-3 w-3 text-cyberpulse-purple" />{b}
                 </span>
@@ -361,7 +361,7 @@ const Home = () => {
               desc="9 hand-picked features — IHL, TTL, packet length, source/dest port, window size, TCP flags, protocol — are extracted per packet." />
             <Step num={3} icon={<Shield className="h-4 w-4" />}
               title="ML Inference"
-              desc="StandardScaler normalises features, then the XGBoost model predicts: Normal (0) or Attack (1) in microseconds." />
+              desc="StandardScaler normalises features, then the LSTM + CNN Hybrid model predicts: Normal (0) or Attack (1) in microseconds." />
             <Step num={4} icon={<Activity className="h-4 w-4" />}
               title="Dashboard & Logging"
               desc="Results are broadcast via WebSocket to the React dashboard and appended to nids_logs.json for persistent audit trails." />

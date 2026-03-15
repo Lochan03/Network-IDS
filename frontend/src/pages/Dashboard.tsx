@@ -541,7 +541,7 @@ const Dashboard = () => {
                 <div className="grid grid-cols-2 gap-3 text-xs">
                   {[
                     { k: 'WebSocket URL', v: 'ws://localhost:8765' },
-                    { k: 'Model',         v: 'XGBoost (nids_xgboost_model3.pkl)' },
+                    { k: 'Model',         v: 'LSTM + CNN Hybrid (nids_LSTM + CNN Hybrid_model3.pkl)' },
                     { k: 'Scaler',        v: 'StandardScaler' },
                     { k: 'Features',      v: '9 extracted features' },
                     { k: 'Status',        v: connected ? '🟢 Online' : '🔴 Offline' },

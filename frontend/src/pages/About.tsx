@@ -75,7 +75,7 @@ const About = () => {
             icon: <Cpu className="h-6 w-6 text-cyberpulse-blue" />,
             bg: 'bg-cyberpulse-blue/10', border: 'border-cyberpulse-blue/20',
             title: 'The Solution',
-            body: 'An XGBoost model trained on 565K+ labelled samples from CIC-IDS 2017 classifies each packet in real-time. Scapy captures live traffic; WebSocket delivers results instantly to the React dashboard.',
+            body: 'An LSTM + CNN Hybrid model trained on 565K+ labelled samples from CIC-IDS 2017 classifies each packet in real-time. Scapy captures live traffic; WebSocket delivers results instantly to the React dashboard.',
           },
         ].map(({ icon, bg, border, title, body }) => (
           <Card key={title} className={`bg-cyberpulse-darker border ${border} hover:scale-[1.02] transition-transform`}>
@@ -102,13 +102,13 @@ const About = () => {
             desc="CICIDS 2017 contains 2.8M+ labelled network flows covering 15 attack types including DoS, DDoS, Brute Force, Web Attacks, Botnet, and Infiltration." />
           <TimelineStep step="Step 02" icon={<GitBranch className="h-5 w-5" />}
             title="Feature Selection"
-            desc="Compared Filter, Wrapper (RFE), and Embedded (XGBoost importance) methods. Final 9 features selected: IP_IHL, IP_TTL, IP_Len, IP_Frag, Proto, Src_Port, Dst_Port, Window, Flags, Pkt_Len." />
+            desc="Compared Filter, Wrapper (RFE), and Embedded (LSTM + CNN Hybrid importance) methods. Final 9 features selected: IP_IHL, IP_TTL, IP_Len, IP_Frag, Proto, Src_Port, Dst_Port, Window, Flags, Pkt_Len." />
           <TimelineStep step="Step 03" icon={<Cpu className="h-5 w-5" />}
             title="Model Comparison"
-            desc="Evaluated XGBoost, Random Forest, and SVM. XGBoost outperformed with 96.52% overall accuracy, near-perfect intrusion recall, and best generalisation." />
+            desc="Evaluated LSTM + CNN Hybrid, Random Forest, and SVM. LSTM + CNN Hybrid outperformed with 96.52% overall accuracy, near-perfect intrusion recall, and best generalisation." />
           <TimelineStep step="Step 04" icon={<Zap className="h-5 w-5" />}
             title="Real-time Deployment"
-            desc="Model serialised with Joblib. Scapy extracts features per-packet, StandardScaler normalises, XGBoost predicts. Results broadcast via asyncio WebSocket to the React frontend." last />
+            desc="Model serialised with Joblib. Scapy extracts features per-packet, StandardScaler normalises, LSTM + CNN Hybrid predicts. Results broadcast via asyncio WebSocket to the React frontend." last />
         </div>
       </section>
 
@@ -185,7 +185,7 @@ const About = () => {
             <CardContent className="grid grid-cols-1 gap-2">
               {[
                 { name: 'Python',      version: '3.8+',    color: '#3b82f6' },
-                { name: 'XGBoost',     version: 'ML Model', color: '#f59e0b' },
+                { name: 'LSTM + CNN Hybrid',     version: 'ML Model', color: '#f59e0b' },
                 { name: 'Scapy',       version: '2.5.0',   color: '#10B981' },
                 { name: 'scikit-learn',version: '1.4.0',   color: '#ea384c' },
                 { name: 'websockets',  version: '12.0',    color: '#9b87f5' },
