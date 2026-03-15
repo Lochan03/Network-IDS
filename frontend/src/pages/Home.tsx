@@ -293,7 +293,7 @@ const Home = () => {
                 color: 'text-cyberpulse-blue',
                 bg: 'bg-cyberpulse-blue/10',
                 border: 'border-cyberpulse-blue/20',
-                title: 'XGBoost ML Engine',
+                title: 'LSTM + CNN Hybrid Model',
                 desc: 'Trained on 565K+ samples from CIC-IDS 2017. Achieves 96.52% accuracy with embedded feature selection.',
               },
               {

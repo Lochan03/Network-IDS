@@ -151,8 +151,8 @@ const Contact = () => {
             <CardContent className="space-y-4">
               {[
                 { icon: <MapPin className="h-5 w-5 text-cyberpulse-purple" />, label: 'Location', val: 'Hyderabad, India' },
-                { icon: <Phone className="h-5 w-5 text-cyberpulse-purple" />, label: 'Phone', val: '+91 9391971961' },
-                { icon: <Mail className="h-5 w-5 text-cyberpulse-purple" />, label: 'Email', val: 'retvikvarmab@gmail.com' },
+                { icon: <Phone className="h-5 w-5 text-cyberpulse-purple" />, label: 'Phone', val: '+91 99590 68627' },
+                { icon: <Mail className="h-5 w-5 text-cyberpulse-purple" />, label: 'Email', val: 'vivekmalluri8904@gmail.com' },
               ].map(({ icon, label, val }) => (
                 <div key={label} className="flex items-start gap-3">
                   <div className="bg-cyberpulse-purple/10 p-2 rounded-lg flex-shrink-0">{icon}</div>

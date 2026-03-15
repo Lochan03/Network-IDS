@@ -32,11 +32,11 @@ const Footer = () => {
               </li>
               <li className="flex items-center gap-2 text-gray-400 justify-center md:justify-start">
                 <Phone size={18} className="text-cyberpulse-purple" />
-                <span>+91 9391971961</span>
+                <span>+91 99590 68627</span>
               </li>
               <li className="flex items-center gap-2 text-gray-400 justify-center md:justify-start">
                 <Mail size={18} className="text-cyberpulse-purple" />
-                <span>retvikvarmab@gmail.com</span>
+                <span>vivekmalluri8904@gmail.com</span>
               </li>
             </ul>
           </div>
